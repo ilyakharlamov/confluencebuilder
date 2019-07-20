@@ -22,6 +22,22 @@ from sphinx.util.osutil import canon_path
 import io
 import posixpath
 import sys
+import codecs
+
+
+class Body(object):
+    def __init__(self):
+        self.body = []
+        self.f = codecs.open(("/tmp/out-%s.txt" % id(self)), "wb", "UTF-8")
+    def __iter__(self):
+        return iter(self.body)
+    def append(self, item):
+        self.f.write(item)
+        return self.body.append(item)
+    def pop(self):
+        return self.body.pop()
+
+
 
 class ConfluenceTranslator(BaseTranslator):
     _tracked_unknown_code_lang = []
@@ -55,7 +71,7 @@ class ConfluenceTranslator(BaseTranslator):
             self.docparent = ''
 
         self.assets = builder.assets
-        self.body = []
+        self.body = Body()
         self.context = []
         self.nl = '\n'
         self.warn = document.reporter.warning
@@ -1346,18 +1362,22 @@ class ConfluenceTranslator(BaseTranslator):
     # ------------------------------
 
     def visit_desc(self, node):
-        self.body.append(self._start_tag(node, 'dl', suffix=self.nl))
-        self.context.append(self._end_tag(node))
+        #self.body.append(self._start_tag(node, 'dl', suffix=self.nl))
+        #self.context.append(self._end_tag(node))
+        pass
 
     def depart_desc(self, node):
-        self.body.append(self.context.pop()) # dl
+        #self.body.append(self.context.pop()) # dl
+        pass
 
     def visit_desc_signature(self, node):
-        self.body.append(self._start_tag(node, 'dt'))
-        self.context.append(self._end_tag(node))
+        pass
+        #self.body.append(self._start_tag(node, 'dt'))
+        #self.context.append(self._end_tag(node))
 
     def depart_desc_signature(self, node):
-        self.body.append(self.context.pop()) # dt
+        #self.body.append(self.context.pop()) # dt
+        pass
 
     def visit_desc_annotation(self, node):
         self.body.append(self._start_tag(node, 'em'))
@@ -1429,11 +1449,13 @@ class ConfluenceTranslator(BaseTranslator):
         self.body.append(self.context.pop()) # em
 
     def visit_desc_content(self, node):
-        self.body.append(self._start_tag(node, 'dd'))
-        self.context.append(self._end_tag(node))
+        #self.body.append(self._start_tag(node, 'dd'))
+        #self.context.append(self._end_tag(node))
+        pass
 
     def depart_desc_content(self, node):
-        self.body.append(self.context.pop()) # dd
+        #self.body.append(self.context.pop()) # dd
+        pass
 
     # -----------------------------------------------------
     # docutils handling "to be completed" marked directives
